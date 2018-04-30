@@ -1,4 +1,4 @@
-module Article
+module BlogSite
   class API < Grape::API
     version 'v1', using: :header, vendor: 'wewin'
     format :json
