@@ -17,5 +17,12 @@ module MyBlog
     # the framework and any gems in your application.
     config.paths.add File.join('app', 'api'), glob: File.join('**', '*.rb')
     config.autoload_paths += Dir[Rails.root.join('app', 'api', '*')]
+
+    config.middleware.insert_before 0, Rack::Cors do
+      allow do
+        origins 'localhost:9000', '127.0.0.1:3000'
+        resource '*', :headers => :any, :methods => [:get, :post, :options]
+      end
+    end
   end
 end
