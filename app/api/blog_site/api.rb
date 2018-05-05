@@ -15,17 +15,21 @@ module BlogSite
     end
 
     resource :articles do
-      # example api/articles/get_articles_list?type='React'
-      desc 'get article list'
+      # example /api/articles/create
+      desc 'create blog'
       params do
-        requires :type, type: String, desc: 'Article kind type: JavaScript, '
+        requires :title, type: String, desc: 'Article title, type: String'
+        requires :content, type: String, desc: 'Article content, type: Text'
       end
-      get :get_articles_list do
-        {
-          code: 200,
-          type: params[:type],
-          message: 'api is ok'
-        }
+      post :create do
+        begin
+          puts "params: #{params}"
+          Article.create!(title: params[:title], content: params[:content])
+          msg = 'create article success'
+        rescue => ex
+          msg = ex.message
+        end
+        {status: 1, msg: msg}
       end
     end
   end
