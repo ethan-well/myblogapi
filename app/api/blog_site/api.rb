@@ -31,6 +31,21 @@ module BlogSite
         end
         {status: 1, msg: msg}
       end
+
+      # example /api/articles/show
+      desc 'show blog'
+      params do
+        requires :id, type: Integer, desc: 'Article id, type: Integer'
+      end
+      get :show do
+        article = Article.find(params[:id])
+        if article.present?
+          {status: 1, msg: 'get article success'}.merge(article.attributes)
+        else
+          {status: 0, msg: 'get article error'}
+        end
+      end
+
     end
   end
 end
