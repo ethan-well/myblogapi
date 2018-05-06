@@ -23,13 +23,11 @@ module BlogSite
       end
       post :create do
         begin
-          puts "params: #{params}"
-          Article.create!(title: params[:title], content: params[:content])
-          msg = 'create article success'
+          article = Article.create!(title: params[:title], content: params[:content])
+          { status: 1, msg: 'create article success', id: article.id }
         rescue => ex
-          msg = ex.message
+          { status: 0, msg: ex.message }
         end
-        {status: 1, msg: msg}
       end
 
       # example /api/articles/show
@@ -40,12 +38,17 @@ module BlogSite
       get :show do
         article = Article.find(params[:id])
         if article.present?
-          {status: 1, msg: 'get article success'}.merge(article.attributes)
+          {status: 1, msg: 'get article success'}.merge({article: article.attributes})
         else
           {status: 0, msg: 'get article error'}
         end
       end
 
+      # example /api/articles/get_lists
+      desc 'get create list'
+      get :get_lists do
+        Article.order(created_at: :desc).limit(10)
+      end
     end
   end
 end
