@@ -1,4 +1,4 @@
-class Comments < ApplicationRecord
+class Comment < ApplicationRecord
   validates :content, presence: true, length: { maximum: 150 }
   validates :article_id, presence: true
   belongs_to :article
