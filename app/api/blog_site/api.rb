@@ -20,7 +20,7 @@ module BlogSite
       params do
         requires :title, type: String, desc: 'Article title, type: String'
         requires :content, type: String, desc: 'Article content, type: Text'
-        requires :category, type: String, desc: 'Article category, type: String'
+        requires :category, type: Integer, desc: 'Article category Id, type: Integer'
       end
       post :create do
         article = Article.new(title: params[:title], content: params[:content])
@@ -61,6 +61,22 @@ module BlogSite
       desc 'get category list'
       get :get_lists do
         {status: 1, categries: Category.all}
+      end
+    end
+
+    resource :category_articles do
+      # example /api/category_articles/get_lists
+      desc "get articles list of one category"
+      params do
+        requires :category, type: Integer, desc: 'Article category, type: Integer'
+      end
+      get :get_lists do
+        category = Category.find(params[:category])
+        if category.present?
+          {status: 1, msg: 'get article list success', articles: category.articles.map(&:attributes)}
+        else
+          {status: 0, mes: 'get article list failed'}
+        end
       end
     end
   end
