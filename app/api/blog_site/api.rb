@@ -20,13 +20,15 @@ module BlogSite
       params do
         requires :title, type: String, desc: 'Article title, type: String'
         requires :content, type: String, desc: 'Article content, type: Text'
+        requires :category, type: String, desc: 'Article category, type: String'
       end
       post :create do
-        begin
-          article = Article.create!(title: params[:title], content: params[:content])
+        article = Article.new(title: params[:title], content: params[:content])
+        ArticleCategory.find_or_create_by(category_id: params[:category], article_id: article.id)
+        if article.save
           { status: 1, msg: 'create article success', id: article.id }
-        rescue => ex
-          { status: 0, msg: ex.message }
+        else
+          { status: 0, msg: article.errors.full_messages[0] }
         end
       end
 
