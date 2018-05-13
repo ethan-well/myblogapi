@@ -56,11 +56,11 @@ module BlogSite
       end
     end
 
-    resource :categries do
-      # example /api/categries/get_lists
+    resource :categories do
+      # example /api/categories/get_lists
       desc 'get category list'
       get :get_lists do
-        {status: 1, categries: Category.all}
+        {status: 1, categories: Category.all}
       end
     end
 
