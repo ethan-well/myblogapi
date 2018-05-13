@@ -53,5 +53,13 @@ module BlogSite
         end
       end
     end
+
+    resource :categries do
+      # example /api/categries/get_lists
+      desc 'get category list'
+      get :get_lists do
+        {status: 1, categries: Category.all}
+      end
+    end
   end
 end
