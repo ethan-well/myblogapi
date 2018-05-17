@@ -40,7 +40,8 @@ module BlogSite
       get :show do
         article = Article.find(params[:id])
         if article.present?
-          {status: 1, msg: 'get article success'}.merge({article: article.attributes})
+          category_id = article.categories.first.id
+          {status: 1, msg: 'get article success'}.merge({article: article.attributes}).merge(category_id: category_id)
         else
           {status: 0, msg: 'get article error'}
         end
