@@ -23,8 +23,7 @@ module BlogSite
         requires :category, type: Integer, desc: 'Article category Id, type: Integer'
       end
       post :create do
-        article = Article.new(title: params[:title], content: params[:content])
-        ArticleCategory.find_or_create_by(category_id: params[:category], article_id: article.id)
+        article = Article.new(title: params[:title], content: params[:content], category_id: params[:category_id])
         if article.save
           { status: 1, msg: 'create article success', id: article.id }
         else
@@ -40,10 +39,7 @@ module BlogSite
       get :show do
         article = Article.find(params[:id])
         if article.present?
-          category = article.categories.first
-          category_id = category.present? ? category.id : nil
-
-          {status: 1, msg: 'get article success'}.merge({article: article.attributes}).merge(category_id: category_id)
+          {status: 1, msg: 'get article success'}.merge({article: article.attributes})
         else
           {status: 0, msg: 'get article error'}
         end
