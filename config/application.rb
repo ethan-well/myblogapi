@@ -21,7 +21,7 @@ module MyBlog
     config.middleware.insert_before 0, Rack::Cors do
       allow do
         origins 'localhost:9000', '127.0.0.1:3000'
-        resource '*', :headers => :any, :methods => [:get, :post, :options]
+        resource '*', :headers => :any, :methods => [:get, :post, :options, :put]
       end
     end
   end
