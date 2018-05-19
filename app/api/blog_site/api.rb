@@ -23,7 +23,7 @@ module BlogSite
         requires :category, type: Integer, desc: 'Article category Id, type: Integer'
       end
       post :create do
-        article = Article.new(title: params[:title], content: params[:content], category_id: params[:category_id])
+        article = Article.new(title: params[:title], content: params[:content], category_id: params[:category])
         if article.save
           { status: 1, msg: 'create article success', id: article.id }
         else
@@ -53,7 +53,27 @@ module BlogSite
           article.attributes.merge({comment_count: article.comments.count})
         end
       end
+
+      # example /api/articles/:id
+      desc 'edit article'
+      params do
+        requires :id, type: Integer, desc: 'Article ID.'
+        requires :title, type: String, desc: 'Article title, type: String'
+        requires :content, type: String, desc: 'Article content, type: Text'
+        requires :category, type: Integer, desc: 'Article category Id, type: Integer'
+      end
+      put ':id' do
+        begin
+          puts "category_id: #{params[:category_id]}"
+          article = Article.find(params[:id])
+          article.update_attributes!(title: params[:title], content: params[:content], category_id: params[:category])
+          { status: 1, msg: 'update article success', id: article.id }
+        rescue => ex
+          { status: 0, msg: "update article false: #{ex.message}"}
+        end
+      end
     end
+
 
     resource :categories do
       # example /api/categories/get_lists
