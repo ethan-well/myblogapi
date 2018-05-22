@@ -70,8 +70,19 @@ module BlogSite
           { status: 0, msg: "update article false: #{ex.message}"}
         end
       end
-    end
 
+      # example /api/articles/:id
+      desc 'delete article'
+      delete ':id' do
+        begin
+          article = Article.find(params[:id])
+          article.destroy!
+          {status: 1, msg: 'delete article success', id: params[:id]}
+        rescue => ex
+          {status: 0, message: "delete article failed: #{ex.message}"}
+        end
+      end
+    end
 
     resource :categories do
       # example /api/categories
