@@ -1,6 +1,6 @@
 class Article < ApplicationRecord
   validates :title, presence: true, length: { in: 2..20 }
-  validates :content, presence: true, length: { minimum: 100 }
+  validates :content, presence: true
   belongs_to :category
   has_many :comments, dependent: :destroy
   has_many :taggeds
