@@ -24,8 +24,8 @@ module BlogSite
       end
       post do
         article = Article.new(title: params[:title], content: params[:content], category_id: params[:category])
-        if article.save
-          { status: 1, msg: 'create article success', id: article.id }
+        if article.save!
+          { status: 1, msg: 'create article success', id: article.id, length: params[:content].length }
         else
           { status: 0, msg: article.errors.full_messages[0] }
         end
@@ -39,7 +39,7 @@ module BlogSite
       get ':id' do
         article = Article.find(params[:id])
         if article.present?
-          {status: 1, msg: 'get article success'}.merge({article: article.attributes})
+          {status: 1, msg: 'get article success'}.merge({article: article.attributes}).merge({length: article.content.length})
         else
           {status: 0, msg: 'get article error'}
         end
@@ -65,7 +65,7 @@ module BlogSite
         begin
           article = Article.find(params[:id])
           article.update_attributes!(title: params[:title], content: params[:content], category_id: params[:category])
-          { status: 1, msg: 'update article success', id: article.id }
+          { status: 1, msg: 'update article success', id: article.id, length: params[:content].length }
         rescue => ex
           { status: 0, msg: "update article false: #{ex.message}"}
         end
