@@ -5,4 +5,5 @@ class Article < ApplicationRecord
   has_many :comments, dependent: :destroy
   has_many :taggeds
   has_many :tags, through: :taggeds
+  belongs_to :user
 end
