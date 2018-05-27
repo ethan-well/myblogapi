@@ -8,7 +8,7 @@ module BlogSite
 
       def current_user
         # find token. Check if valid.
-        token = ApiKey.where(access_token: params[:token]).first
+        token = ApiKey.where(access_token: params[:access_token]).first
         if token && !token.expired?
           @current_user = User.find(token.user_id)
         else
@@ -34,9 +34,9 @@ module BlogSite
 
         if user && user.authenticate(params[:password])
           api_key = ApiKey.create(user_id: user.id)
-          {token: api_key.access_token}
+          {status: 1, msg: 'authorized', access_token: api_key.access_token}
         else
-          error!('Unauthorized.', 401)
+          {status: 0, msg: 'Unauthorized'}
         end
       end
 
@@ -55,7 +55,7 @@ module BlogSite
         begin
           user = User.create!(name: params[:name], email: params[:email], password: params[:password], password_confirmation: params[:password_confirmation])
           api_key = ApiKey.create!(user_id: user.id)
-          {status: 1, msg: 'welcome here!', token: api_key.access_token}
+          {status: 1, msg: 'welcome here!', access_token: api_key.access_token}
         rescue => ex
           {status: 0, msg: "sign up failed, message: #{ex.message}"}
         end
