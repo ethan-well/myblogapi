@@ -26,14 +26,13 @@ module BlogSite
         requires :password, type: String, desc: 'password'
       end
       post :login do
-        if params[:login].include?('@')
-          user = User.find_by_email(params[:login])
-        else
-          user = User.find_by_name(params[:login])
-        end
-
+        user = if params[:login].include?('@')
+                 User.find_by_email(params[:login])
+               else
+                 User.find_by_name(params[:login])
+               end
         if user && user.authenticate(params[:password])
-          api_key = ApiKey.create(user_id: user.id)
+          api_key = user.generate_or_update_api_key
           {status: 1, msg: 'authorized', access_token: api_key.access_token}
         else
           {status: 0, msg: 'Unauthorized'}
