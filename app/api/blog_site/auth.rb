@@ -1,22 +1,5 @@
 module BlogSite
   class Auth < Grape::API
-
-    helpers do
-      def authenticate!
-        error!('Unauthorized. Invalid or expired token.', 401) unless current_user
-      end
-
-      def current_user
-        # find token. Check if valid.
-        token = ApiKey.where(access_token: params[:access_token]).first
-        if token && !token.expired?
-          @current_user = User.find(token.user_id)
-        else
-          false
-        end
-      end
-    end
-
     resource :auth do
 
       # example 'api/auth/login'
@@ -33,7 +16,7 @@ module BlogSite
                end
         if user && user.authenticate(params[:password])
           api_key = user.generate_or_update_api_key
-          {status: 1, msg: 'authorized', access_token: api_key.access_token}
+          {status: 1, msg: 'authorized', access_token: api_key.access_token, expires_at: api_key.expires_at}
         else
           {status: 0, msg: 'Unauthorized'}
         end
@@ -57,6 +40,20 @@ module BlogSite
           {status: 1, msg: 'welcome here!', access_token: api_key.access_token}
         rescue => ex
           {status: 0, msg: "sign up failed, message: #{ex.message}"}
+        end
+      end
+
+      # example 'api/auth/logout'
+      desc 'user logout'
+      params do
+        requires :access_token, type: String, desc: 'access token'
+      end
+      delete :logout do
+        begin
+          ApiKey.find_by_access_token(params[:access_token]).destroy!
+          {status: 1, msg: "sign out success"}
+        rescue => ex
+          {status: 0, msg: "sign out failed, message: #{ex.message}"}
         end
       end
     end

@@ -9,7 +9,8 @@ module BlogSite
         requires :category, type: Integer, desc: 'Article category Id, type: Integer'
       end
       post do
-        article = Article.new(title: params[:title], content: params[:content], category_id: params[:category])
+        authenticate!
+        article = Article.new(title: params[:title], content: params[:content], category_id: params[:category], user_id: 1)
         if article.save!
           { status: 1, msg: 'create article success', id: article.id, length: params[:content].length }
         else
@@ -48,6 +49,7 @@ module BlogSite
         requires :category, type: Integer, desc: 'Article category Id, type: Integer'
       end
       put ':id' do
+        authenticate!
         begin
           article = Article.find(params[:id])
           article.update_attributes!(title: params[:title], content: params[:content], category_id: params[:category])
@@ -60,6 +62,7 @@ module BlogSite
       # example /api/articles/:id
       desc 'delete article'
       delete ':id' do
+        authenticate!
         begin
           article = Article.find(params[:id])
           article.destroy!
