@@ -25,8 +25,9 @@ module BlogSite
       end
       get ':id' do
         article = Article.find(params[:id])
+        can_manage = current_user && current_user.id == article.user_id
         if article.present?
-          {status: 1, msg: 'get article success'}.merge({article: article.attributes}).merge({length: article.content.length})
+          {status: 1, msg: 'get article success'}.merge({article: article.attributes}).merge({length: article.content.length}).merge(can_manage: can_manage)
         else
           {status: 0, msg: 'get article error'}
         end
