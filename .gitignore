@@ -24,6 +24,8 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+/config/database.yml
 db/schema.rb
+
 
 Gemfile.lock
