@@ -10,7 +10,7 @@ module BlogSite
       end
       post do
         authenticate!
-        article = Article.new(title: params[:title], content: params[:content], category_id: params[:category], user_id: 1)
+        article = Article.new(title: params[:title], content: params[:content], category_id: params[:category], user_id: current_user.id)
         if article.save!
           { status: 1, msg: 'create article success', id: article.id, length: params[:content].length }
         else
@@ -33,7 +33,7 @@ module BlogSite
       end
 
       # example /api/articles
-      desc 'get create list'
+      desc 'get article list'
       get do
         Article.order(created_at: :desc).limit(10).map do |article|
           article.attributes.merge({comment_count: article.comments.count})
@@ -51,7 +51,7 @@ module BlogSite
       put ':id' do
         authenticate!
         begin
-          article = Article.find(params[:id])
+          article = current_user.articles.find(params[:id])
           article.update_attributes!(title: params[:title], content: params[:content], category_id: params[:category])
           { status: 1, msg: 'update article success', id: article.id, length: params[:content].length }
         rescue => ex
@@ -64,7 +64,7 @@ module BlogSite
       delete ':id' do
         authenticate!
         begin
-          article = Article.find(params[:id])
+          article = current_user.articles.find(params[:id])
           article.destroy!
           {status: 1, msg: 'delete article success', id: params[:id]}
         rescue => ex
