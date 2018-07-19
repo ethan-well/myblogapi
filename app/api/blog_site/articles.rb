@@ -36,7 +36,7 @@ module BlogSite
       # example /api/articles
       desc 'get article list'
       get do
-        Article.order(created_at: :desc).limit(10).map do |article|
+        Article.order(updated_at: :desc).limit(10).map do |article|
           article.attributes.merge({comment_count: article.comments.count})
         end
       end
