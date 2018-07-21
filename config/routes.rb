@@ -5,6 +5,8 @@ Rails.application.routes.draw do
   resources :myblog, only: [:inde] do
     collection do
       get :test
+      post :test_post
     end 
   end
+  match '/myblog/test_post', :controller => 'myblog', :action => 'options', via: [:options]
 end
