@@ -6,13 +6,21 @@ module BlogSite
       params do
         requires :title, type: String, desc: 'Article title, type: String'
         requires :content, type: String, desc: 'Article content, type: Text'
-        requires :category, type: Integer, desc: 'Article category Id, type: Integer'
+        requires :category, type: Integer, desc: 'Article category id, type: Integer'
+        requires :private, type: Boolean, desc: 'Article private state, type: Boolean'
       end
       post do
         authenticate!
-        article = Article.new(title: params[:title], content: params[:content], category_id: params[:category], user_id: current_user.id)
+        article_attr = {
+          title: params[:title],
+          content: params[:content],
+          category_id: params[:category],
+          user_id: current_user.id,
+          private: params[:private]
+        }
+        article = Article.new(article_attr)
         if article.save!
-          { status: 1, msg: 'create article success', id: article.id, length: params[:content].length }
+          { status: 1, msg: 'create article success', id: article.id, length: params[:content].length, private: params[:private] }
         else
           { status: 0, msg: article.errors.full_messages[0] }
         end
@@ -27,7 +35,14 @@ module BlogSite
         article = Article.find(params[:id])
         can_manage = current_user && current_user.id == article.user_id
         if article.present?
-          {status: 1, msg: 'get article success'}.merge({article: article.attributes}).merge({length: article.content.length}).merge(can_manage: can_manage)
+          {
+            status: 1,
+            msg: 'get article success',
+            article: article.attributes,
+            length: article.content.length,
+            can_manage: can_manage,
+            private: article.private
+          }
         else
           {status: 0, msg: 'get article error'}
         end
@@ -53,7 +68,13 @@ module BlogSite
         authenticate!
         begin
           article = current_user.articles.find(params[:id])
-          article.update_attributes!(title: params[:title], content: params[:content], category_id: params[:category])
+          article_attr = {
+            title: params[:title],
+            content: params[:content],
+            category_id: params[:category],
+            private: params[:private]
+          }
+          article.update_attributes!(article_attr)
           { status: 1, msg: 'update article success', id: article.id, length: params[:content].length }
         rescue => ex
           { status: 0, msg: "update article false: #{ex.message}"}
