@@ -22,5 +22,6 @@ module BlogSite
 
     mount BlogSite::Auth
     mount BlogSite::Articles
+    mount BlogSite::Categories
   end
 end
