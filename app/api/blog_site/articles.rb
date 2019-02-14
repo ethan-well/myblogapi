@@ -14,7 +14,7 @@ module BlogSite
         article_attr = {
           title: params[:title],
           content: params[:content],
-          category_id: params[:category],
+          category_id: params[:category_id],
           user_id: current_user.id,
           private: params[:private]
         }
@@ -71,7 +71,7 @@ module BlogSite
           article_attr = {
             title: params[:title],
             content: params[:content],
-            category_id: params[:category],
+            category_id: params[:category_id],
             private: params[:private]
           }
           article.update_attributes!(article_attr)

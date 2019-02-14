@@ -1,5 +1,7 @@
 {
   "name": "myBlog",
   "private": true,
-  "dependencies": {}
+  "dependencies": {
+    "redux-logger": "^3.0.6"
+  }
 }
