@@ -62,7 +62,7 @@ module BlogSite
         requires :id, type: Integer, desc: 'Article ID.'
         requires :title, type: String, desc: 'Article title, type: String'
         requires :content, type: String, desc: 'Article content, type: Text'
-        requires :category, type: Integer, desc: 'Article category Id, type: Integer'
+        requires :category_id, type: Integer, desc: 'Article category Id, type: Integer'
       end
       put ':id' do
         authenticate!
