@@ -6,7 +6,7 @@ module BlogSite
       params do
         requires :title, type: String, desc: 'Article title, type: String'
         requires :content, type: String, desc: 'Article content, type: Text'
-        requires :category, type: Integer, desc: 'Article category id, type: Integer'
+        requires :category_id, type: Integer, desc: 'Article category id, type: Integer'
         requires :private, type: Boolean, desc: 'Article private state, type: Boolean'
       end
       post do
