@@ -1,3 +1,24 @@
 <div class="welcome">
   <h1><a href="http://111.230.71.48">Welcome to 蚂蚁哈哈哈 blog site!</a></h1>
+  <button class="test-pjax" href='#'>test-pjax</button>
 </div>
+
+<div id="replace-container">
+  replace container
+</div>
+
+<script type="text/javascript">
+  function test() {
+    console.log('test pjax!');
+  }
+
+  $('.test-pjax').on('click', function(){
+    $.pjax({
+      url: 'http://localhost:3300/test_pjax',
+      container: '#replace-container',
+      fragment: '#replace-container'
+    })
+  })
+
+  test();
+</script>
