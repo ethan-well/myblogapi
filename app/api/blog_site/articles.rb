@@ -33,6 +33,7 @@ module BlogSite
       end
       get ':id' do
         article = Article.find(params[:id])
+
         can_manage = current_user && current_user.id == article.user_id
         if article.present?
           {
