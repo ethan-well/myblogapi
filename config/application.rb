@@ -20,7 +20,7 @@ module MyBlog
 
     config.middleware.insert_before 0, Rack::Cors do
       allow do
-        origins 'localhost:9000', '127.0.0.1:3000'
+        origins 'localhost:9000'  # 解决开发环境下的跨域请求文件
         resource '*', :headers => :any, :methods => [:get, :post, :put, :delete]
       end
     end
